@@ -1,4 +1,5 @@
-const Employee = require('../models/Employee');
+const Employee   = require('../models/Employee');
+const Attendance = require('../models/Attendance');
 
 // @desc    Create new employee
 // @route   POST /api/employees
@@ -63,6 +64,9 @@ const deleteEmployee = async (req, res, next) => {
       error.statusCode = 404;
       return next(error);
     }
+
+    // Remove all attendance records tied to this employee
+    await Attendance.deleteMany({ employeeId });
 
     res.status(200).json({ success: true, message: 'Employee deleted successfully' });
   } catch (error) {
